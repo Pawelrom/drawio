@@ -1,4 +1,5 @@
-(function () {
+(function ()
+{
     var HIGHLIGHT_CELL_COLOR = '#FF8000';
     var HIGHLIGHT_EDGE_COLOR = '#FFB366';
     var activeHighlights = [];
@@ -42,44 +43,20 @@
         }
     }
 
-    function onPageChange()
+    window.Draw.loadPlugin(function (ui)
     {
-        clearHighlights();
-        if (graph)
-        {
-            graph.getSelectionModel().removeListener(onSelectionChange);
-        }
-        if (window.App && window.App.main && window.App.main.editor)
-        {
-            graph = window.App.main.editor.graph;
-            graph.getSelectionModel().addListener(mxEvent.CHANGE, onSelectionChange);
-        }
-    }
-
-    function init()
-    {
-        graph = window.App.main.editor.graph;
+        graph = ui.editor.graph;
         graph.getSelectionModel().addListener(mxEvent.CHANGE, onSelectionChange);
 
-        // Page change event name to verify in DevTools if needed (see plan Task 3 Krok 4)
-        if (window.App.main.addListener)
+        ui.editor.addListener('pageSelected', function ()
         {
-            window.App.main.addListener('pageSelected', onPageChange);
-        }
-    }
-
-    function waitForApp()
-    {
-        if (window.App && window.App.main &&
-            window.App.main.editor && window.App.main.editor.graph)
-        {
-            init();
-        }
-        else
-        {
-            requestAnimationFrame(waitForApp);
-        }
-    }
-
-    window.addEventListener('load', waitForApp);
+            clearHighlights();
+            if (graph)
+            {
+                graph.getSelectionModel().removeListener(onSelectionChange);
+            }
+            graph = ui.editor.graph;
+            graph.getSelectionModel().addListener(mxEvent.CHANGE, onSelectionChange);
+        });
+    });
 })();
