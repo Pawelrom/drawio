@@ -45,6 +45,10 @@
     function onPageChange()
     {
         clearHighlights();
+        if (graph)
+        {
+            graph.getSelectionModel().removeListener(onSelectionChange);
+        }
         if (window.App && window.App.main && window.App.main.editor)
         {
             graph = window.App.main.editor.graph;
