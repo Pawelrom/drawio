@@ -64,7 +64,7 @@
 		window.electron.registerMsgListener('ext-cmd', function (msg)
 		{
 			if (msg.type !== 'highlight-toggle') return;
-			highlightEnabled = msg.value;
+			highlightEnabled = !!msg.payload.value;
 			if (!highlightEnabled)
 			{
 				clearHighlights();
